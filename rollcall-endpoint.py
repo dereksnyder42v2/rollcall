@@ -11,7 +11,7 @@ import datetime
 def log(line):
     with open("rollcall.log", "a") as f:
         #f.write(str(datetime.datetime.now()) + ":" + line + "\n")
-		f.write("%s: %s\n" % (str(datetime.datetime.now(), line) )
+		f.write("%s: %s\n" % (str(datetime.datetime.now(), line) ) )
 
 # returns server instance if successful, else False
 def redisConnect(host, port):
@@ -59,4 +59,6 @@ if __name__ == "__main__":
         print(
             """</body>
 </html>""")
+
+	print("""</body></html>""")
 
