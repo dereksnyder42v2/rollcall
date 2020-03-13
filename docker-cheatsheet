@@ -1,0 +1,25 @@
+# delete all docker images
+docker system prune -a
+
+# build a new docker image
+docker image build -t <image name, ex:"rollcall"> .
+
+# start a container 
+docker container run [opt] --name <container name> <image name>
+docker container run --publish 80:80 --detach --name willy rollcall
+
+# stop a container
+docker stop <container name>
+
+# delete a container 
+docker rm <container name>
+
+# Show all built docker images
+docker images 
+
+# Show all running docker images
+docker ps -al
+
+# Get a shell in a docker container
+docker exec -it <name or ID> /bin/bash
+
