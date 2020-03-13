@@ -49,8 +49,8 @@ if __name__ == "__main__":
         form = cgi.FieldStorage()
         print(form, LINEBR)
         for thing in form:
-			print("%s: %s<br>\n" % (thing, form.getvalue(thing)))
-		print("</body>\n</html>")
+            print("%s: %s<br>\n" % (thing, form.getvalue(thing)))
+        print("</body>\n</html>")
     except Exception as err:
         errStr = traceback.format_exc() 
         print(errStr)
