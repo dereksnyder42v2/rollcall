@@ -7,11 +7,11 @@ Essentially, this kit maintains a table of IP addresses and hostnames. The table
 ...would update the table entry for the hostname 'hal', and as a response, you would get a plaintext web page something like:  
   
 <i>
-OK  
-(key),(val)  
-hal,192.168.0.1  
-</i>
-
+OK<br />
+(key),(val)<br />
+hal,192.168.0.1<br />
+</i>  
+  
 Why is my Redis server not running in docker??  
 Comment out the 'bind' statement in /etc/redis/redis.conf
 
