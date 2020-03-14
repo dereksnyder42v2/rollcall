@@ -7,6 +7,7 @@ import redis
 import datetime
 import string
 import ipaddress
+import os
 
 #cgitb.enable()
 
@@ -60,13 +61,6 @@ def redisKeys(server):
     
     return l
 
-def validIp(addr):
-    try:
-        ipaddress.ip_address(addr)
-    except ValueError:
-        return False
-    return True
-
 """
 Allowed characters, per RFC 952:
 - lowercase alpha (a-z)
@@ -78,29 +72,33 @@ def validHostname(host):
             char not in string.digits and \
             char != "-":
             return False
-        else:
-            return True
+    return True
 
 # ---MAIN---
 if __name__ == "__main__":
     print("Content-Type: text/plain\r\n\r\n")     
     server = redisConnect("localhost", 6379)
+    #for k in os.environ.keys():
+        #print("%s: %s" % (k, os.environ.get(k)))
+    if "REMOTE_ADDR" not in os.environ.keys():
+        print("Could not determine client address.")
+        exit()
+    else:
+        IP = os.environ.get("REMOTE_ADDR")
     if not server:
         print("Redis server connection failed.")
         exit()
     form = cgi.FieldStorage()
     #print(form, LINEBR) # for debugging - show the whole form
-    IP = None
     HOSTNAME = None
     for thing in form:
-        if str(thing)=="ip":
-            IP = form.getvalue(thing)
-        elif str(thing)=="hostname":
+        if str(thing)=="hostname":
             HOSTNAME = form.getvalue(thing).lower()
     # validate input 
-    if validIp(IP) and validHostname(HOSTNAME):
-        print("OK")
-        redisWrite(server, HOSTNAME, IP)
+    if HOSTNAME:
+        if validHostname(HOSTNAME):
+            print("OK")
+            redisWrite(server, HOSTNAME, IP)
     else:
         print("FAIL")
     print("(key),(value)")
