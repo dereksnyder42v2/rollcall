@@ -5,15 +5,10 @@ import traceback
 import sys
 import redis
 import datetime
-import os
+import string
+import ipaddress
 
 #cgitb.enable()
-
-# accepts name of environment variable as argument
-def getEnvVar(varName):
-    result = os.environ.get(varName)
-
-    return result
 
 # TODO this doesn't work at all haha
 def log(line):
@@ -65,21 +60,33 @@ def redisKeys(server):
     
     return l
 
+def validIp(addr):
+    try:
+        ipaddress.ip_address(addr)
+    except ValueError:
+        return False
+    return True
+
+"""
+Allowed characters, per RFC 952:
+- lowercase alpha (a-z)
+- digits (0-9)
+- hyphen character ("-")"""
+def validHostname(host):
+    for char in host:
+        if char not in string.ascii_lowercase and \
+            char not in string.digits and \
+            char != "-":
+            return False
+        else:
+            return True
+
 # ---MAIN---
 if __name__ == "__main__":
-
-    LINEBR = "<br>"     
-
-    print("""Content-Type: text/html\r\n\r\n
-<!DOCTYPE html>
-<head>
-<title>Rollcall</title>
-</head>
-<body>""")     
+    print("Content-Type: text/plain\r\n\r\n")     
     server = redisConnect("localhost", 6379)
     if not server:
-        print("Redis server connection failed.<br>\n")
-        print("</body>\n</html>")
+        print("Redis server connection failed.")
         exit()
     form = cgi.FieldStorage()
     #print(form, LINEBR) # for debugging - show the whole form
@@ -89,14 +96,13 @@ if __name__ == "__main__":
         if str(thing)=="ip":
             IP = form.getvalue(thing)
         elif str(thing)=="hostname":
-            HOSTNAME = form.getvalue(thing)
-    if (IP != None) and (HOSTNAME != None):
-        print("IP: %s, HOSTNAME: %s<br>\n" % (IP, HOSTNAME))
+            HOSTNAME = form.getvalue(thing).lower()
+    # validate input 
+    if validIp(IP) and validHostname(HOSTNAME):
+        print("OK")
         redisWrite(server, HOSTNAME, IP)
     else:
-        print("IP address and HOSTNAME not received.<br>\n")
-    print("(key)&emsp;&emsp;&emsp;(value)<br>\n")
+        print("FAIL")
+    print("(key),(value)")
     for h in redisKeys(server):
-        print("%s&emsp;&emsp;&emsp;%s<br>\n" % (h, redisRead(server, h) ) ) 
-
-    print("</body>\n</html>")
+        print("%s,%s" % (h, redisRead(server, h)) )
