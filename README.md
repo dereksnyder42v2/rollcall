@@ -11,7 +11,7 @@ OK<br />
 (key),(val)<br />
 hal,192.168.0.1<br />
 </i>  
-  
+<br /><br />  
 Why is my Redis server not running in docker??  
 Comment out the 'bind' statement in /etc/redis/redis.conf
 
