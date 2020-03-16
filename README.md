@@ -4,8 +4,7 @@ Attempt to simplify management of IoT devices in a home network.
   
 Essentially, this kit maintains a table of IP addresses and hostnames. The table is updated by requesting the endpoint and specifying the hostname in the query string, e.g.:  
 <b>$ curl (address:port)/cgi-bin/rollcall.py?hostname=hal</b>    
-...would update the table entry for the hostname 'hal', and as a response, you would get a .json something like:  
-  
+...would update the table entry for the hostname 'hal', and as a response, you would get a .json something like:<br />
 <b>
 {<br />
     "table": {<br />
@@ -17,8 +16,5 @@ Essentially, this kit maintains a table of IP addresses and hostnames. The table
 }<br />
 </b>  
 <br /><br />  
-Why is my Redis server not running in docker??  
-Comment out the 'bind' statement in /etc/redis/redis.conf
-
-How do I flush my Redis DB?  
-$ redis-cli flushall
+Why is my Redis server not running in docker??<br />Comment out the 'bind' statement in /etc/redis/redis.conf<br />
+How do I flush my Redis DB?<br />$ redis-cli flushall<br />
