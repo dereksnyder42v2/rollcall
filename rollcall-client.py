@@ -9,8 +9,7 @@ _SERVER_ADDR = "10.0.0.201/cgi-bin/rollcall-json.py"
 
 def sendUpdate():
     payload = {'hostname': socket.gethostname()}
-    r = requests.get("http://" + _SERVER_ADDR)
-    #r = requests.get("http://" + _SERVER_ADDR, params=payload)
+    r = requests.get("http://" + _SERVER_ADDR, params=payload)
     #print("Request url was:", r.url)
     return r.text
 
