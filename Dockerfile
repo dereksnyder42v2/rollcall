@@ -9,6 +9,7 @@ RUN apt-get install apache2 -y
 RUN apt-get install redis-server -y
 
 RUN python3 -m pip install redis
+RUN python3 -m pip install pytz
 
 # for debugging. 
 #RUN apt-get install net-tools -y

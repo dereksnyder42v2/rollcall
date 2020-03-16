@@ -5,17 +5,24 @@ import socket
 import json
 import ast
 
-_SERVER_ADDR = "10.0.0.201/cgi-bin/rollcall-json.py"
+_SERVER_ADDR = "10.0.0.201/cgi-bin/rollcall.py"
 
 def sendUpdate():
     payload = {'hostname': socket.gethostname()}
     r = requests.get("http://" + _SERVER_ADDR, params=payload)
     #print("Request url was:", r.url)
-    return r.text
+    return r
 
 if __name__ == "__main__":
-    resp = sendUpdate()
-    j = json.loads(resp)
+    req = sendUpdate()
+    try:
+        j = json.loads(req.text)
+    except Exception as e:
+        print("JSON failed to load.")
+        print("\tRequested URL: %s" % req.url)
+        print("\tStatus code: %d" % req.status_code)
+        print("\tResponse text:\n%s" % req.text)
+        quit()
     print("ERRMSGS")
     for msg in j["errMsgs"]:
         print(msg)

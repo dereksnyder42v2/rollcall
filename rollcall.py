@@ -4,7 +4,7 @@ import cgi, cgitb
 import traceback
 import sys
 import redis
-import datetime
+import datetime, pytz
 import string
 import ipaddress
 import os
@@ -39,6 +39,17 @@ def validHostname(hostname):
             return False
     return True
 
+"""
+yo, straight up, fuck daylight savings omg
+essentially this gets current mtn time
+replace it with whatever is sane/ applicable"""
+def getLocalTime():
+    UTC = pytz.timezone("UTC")
+    now = UTC.localize(datetime.datetime.utcnow())
+    ridiculous = now.astimezone(pytz.timezone("America/Denver"))
+    s = "%d-%02d-%02d %02d:%02d" % (ridiculous.year, ridiculous.month, ridiculous.day, ridiculous.hour, ridiculous.minute)
+    return s
+    
 # ---MAIN---
 if __name__ == "__main__":
     print("Content-Type: application/json\r\n\r\n")     
@@ -71,7 +82,7 @@ if __name__ == "__main__":
         
         # validate input and update server
         if IP and validHostname(HOSTNAME):
-            server.set(HOSTNAME, json.dumps({'IP': IP, 'TIME': str(datetime.datetime.now()) }))
+            server.set(HOSTNAME, json.dumps({'IP': IP, 'TIME': getLocalTime() }))
             errMsgs.append("Redis update successful")
         else:
             errMsgs.append("HOSTNAME invalid or not found")
