@@ -6,16 +6,16 @@ Essentially, this kit maintains a table of IP addresses and hostnames. The table
 <b>$ curl (address:port)/cgi-bin/rollcall.py?hostname=hal</b>    
 ...would update the table entry for the hostname 'hal', and as a response, you would get a .json something like:  
   
-<i>
+<b>
 {<br />
-  "table": {<br />
-    "hal": "{\"IP\": \"10.0.0.201\", \"TIME\": \"2020-03-15 23:54\"}"<br />
-  },<br />
-  "errMsgs": [<br />
-    "HOSTNAME invalid or not found"<br />
-  ]<br />
+    "table": {<br />
+        "hal": "{\"IP\": \"10.0.0.201\", \"TIME\": \"2020-03-15 23:54\"}"<br />
+    },<br />
+    "errMsgs": [<br />
+        "HOSTNAME invalid or not found"<br />
+    ]<br />
 }<br />
-</i>  
+</b>  
 <br /><br />  
 Why is my Redis server not running in docker??  
 Comment out the 'bind' statement in /etc/redis/redis.conf
